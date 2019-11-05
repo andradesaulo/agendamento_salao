@@ -12,7 +12,10 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@material-ui/core": "^4.5.2",
     "bootstrap": "^4.3.1",
+    "nodemon": "^1.19.4",
+    "npm-watch": "^0.6.0",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-router": "^5.1.2",
@@ -30,5 +33,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "devDependencies": {}
 }
