@@ -8,7 +8,7 @@ import red from '@material-ui/core/colors/red';
 import blueGrey from '@material-ui/core/colors/blueGrey'
 import grey from '@material-ui/core/colors/grey'
 import brown from '@material-ui/core/colors/brown'
-
+import CssBaseline from '@material-ui/core/CssBaseline'
 const theme = createMuiTheme({
     palette: {
         primary: red,
@@ -17,6 +17,7 @@ const theme = createMuiTheme({
 })
 export default props =>
     <ThemeProvider theme={theme}>
+        <CssBaseline/>
         <BrowserRouter>
             <Routes/>
         </BrowserRouter>
