@@ -5,9 +5,14 @@ import { BrowserRouter } from 'react-router-dom'
 import { createMuiTheme } from '@material-ui/core/styles';
 import Routes from './Routes'
 import red from '@material-ui/core/colors/red';
+import blueGrey from '@material-ui/core/colors/blueGrey'
+import grey from '@material-ui/core/colors/grey'
+import brown from '@material-ui/core/colors/brown'
+
 const theme = createMuiTheme({
     palette: {
-        primary: red;
+        primary: red,
+        secondary: blueGrey,
     },
 })
 export default props =>

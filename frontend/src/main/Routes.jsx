@@ -1,11 +1,14 @@
 import React from 'react'
-import { Route, Redirect } from 'react-router'
+import { Switch, Route, Redirect } from 'react-router'
 
 
-import Login from '../components/login/Login'
-
+import Login from '../components/autenticacao/login/Login'
+import Entrar from '../components/autenticacao/entrar/Entrar'
+import Cliente from '../components/cliente/Cliente'
 export default props => 
-    <div>
-        <Route exact path='/' component={Login} />
-        <Redirect from='*' to='/' />
-    </div>
+        <Switch>
+            <Route exact path='/' component={Login} />
+            <Route path='/entrar' component={Entrar} />
+            <Route path='/cliente' component={Cliente} />
+            <Redirect from='*' to='/' />
+        </Switch>
