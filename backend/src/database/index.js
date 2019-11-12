@@ -1,13 +1,14 @@
 import Sequelize from 'sequelize';
 
 import Endereco from '../app/models/Endereco';
+import Horario from '../app/models/Horario';
 import Profissional from '../app/models/Profissional';
 import ProfissionalServico from '../app/models/ProfissionalServico';
 import Servico from '../app/models/Servico';
 
 import databaseConfig from '../config/database';
 
-const models = [Endereco, Profissional, ProfissionalServico, Servico];
+const models = [Endereco, Horario, Profissional, ProfissionalServico, Servico];
 
 class Database {
   constructor() {
