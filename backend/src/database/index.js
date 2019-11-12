@@ -1,10 +1,11 @@
 import Sequelize from 'sequelize';
 
+import Endereco from '../app/models/Endereco';
 import Servico from '../app/models/Servico';
 
 import databaseConfig from '../config/database';
 
-const models = [Servico];
+const models = [Endereco, Servico];
 
 class Database {
   constructor() {
