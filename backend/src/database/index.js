@@ -1,5 +1,6 @@
 import Sequelize from 'sequelize';
 
+import Agendamento from '../app/models/Agendamento';
 import Endereco from '../app/models/Endereco';
 import Cliente from '../app/models/Cliente';
 import Horario from '../app/models/Horario';
@@ -10,6 +11,7 @@ import Servico from '../app/models/Servico';
 import databaseConfig from '../config/database';
 
 const models = [
+  Agendamento,
   Endereco,
   Cliente,
   Horario,
