@@ -1,7 +1,28 @@
 import * as Yup from 'yup';
 import Servico from '../models/Servico';
+import Profissional from '../models/Profissional';
 
 class ServicoController {
+  // Lista
+  async index(req, res) {
+    const { page = 1 } = req.query;
+
+    const servicos = await Servico.findAll({
+      order: ['descricao'],
+      attributes: ['id', 'descricao', 'preco_servico', 'exclusivo', 'duracao'],
+      limit: 20,
+      offset: (page - 1) * 20,
+      include: [
+        {
+          model: Profissional,
+          attributes: ['id', 'nome', 'telefone'],
+        },
+      ],
+    });
+
+    return res.json(servicos);
+  }
+
   // Cadastra
   async store(req, res) {
     const schema = Yup.object().shape({

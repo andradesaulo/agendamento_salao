@@ -10,9 +10,20 @@ class Servico extends Model {
         duracao: Sequelize.TIME,
       },
       {
+        freezeTableName: true,
+        tableName: 'tb_servico',
         sequelize,
       }
     );
+
+    return this;
+  }
+
+  static associate(models) {
+    this.belongsToMany(models.Profissional, {
+      through: 'tb_profissional_servico',
+      foreignKey: 'id_servico',
+    });
   }
 }
 

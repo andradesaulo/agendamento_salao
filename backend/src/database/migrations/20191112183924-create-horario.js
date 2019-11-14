@@ -1,7 +1,7 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('tb_horario', {
-      id_horario: {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -9,7 +9,7 @@ module.exports = {
       },
       id_profissional: {
         allowNull: false,
-        references: { model: 'tb_profissional', key: 'id_profissional' },
+        references: { model: 'tb_profissional', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
         type: Sequelize.INTEGER,

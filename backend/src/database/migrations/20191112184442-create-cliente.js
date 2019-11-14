@@ -1,7 +1,7 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('tb_cliente', {
-      id_cliente: {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -9,7 +9,7 @@ module.exports = {
       },
       id_endereco: {
         allowNull: false,
-        references: { model: 'tb_endereco', key: 'id_endereco' },
+        references: { model: 'tb_endereco', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
         type: Sequelize.INTEGER,

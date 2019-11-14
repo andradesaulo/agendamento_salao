@@ -12,8 +12,8 @@ import databaseConfig from '../config/database';
 
 const models = [
   Agendamento,
-  Endereco,
   Cliente,
+  Endereco,
   Horario,
   Profissional,
   ProfissionalServico,

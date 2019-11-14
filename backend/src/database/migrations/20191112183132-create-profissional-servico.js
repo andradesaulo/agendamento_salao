@@ -1,10 +1,10 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('tb_profissional_servico', {
-      id_profissional: {
+      id: {
         allowNull: false,
         primaryKey: true,
-        references: { model: 'tb_profissional', key: 'id_profissional' },
+        references: { model: 'tb_profissional', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
         type: Sequelize.INTEGER,
@@ -12,7 +12,7 @@ module.exports = {
       id_servico: {
         allowNull: false,
         primaryKey: true,
-        references: { model: 'tb_endereco', key: 'id_endereco' },
+        references: { model: 'tb_servico', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
         type: Sequelize.INTEGER,

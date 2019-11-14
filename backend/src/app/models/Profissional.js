@@ -9,6 +9,8 @@ class Profissional extends Model {
         email: Sequelize.STRING(60),
       },
       {
+        freezeTableName: true,
+        tableName: 'tb_profissional',
         sequelize,
       }
     );
@@ -18,6 +20,10 @@ class Profissional extends Model {
 
   static associate(models) {
     this.belongsTo(models.Endereco, { foreignKey: 'id_endereco' });
+    this.belongsToMany(models.Servico, {
+      through: 'tb_profissional_servico',
+      foreignKey: 'id_profissional',
+    });
   }
 }
 

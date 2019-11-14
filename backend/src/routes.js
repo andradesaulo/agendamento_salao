@@ -1,9 +1,12 @@
 import { Router } from 'express';
 
+import ServicoController from './app/controllers/ServicoController';
+
 const routes = new Router();
 
-routes.get('/', (req, res) => {
-  return res.json({ message: 'Hello World' });
-});
+routes.get('/servicos', ServicoController.index);
+routes.post('/servico', ServicoController.store);
+routes.put('/servico/:id_servico', ServicoController.update);
+routes.delete('/servico/:id_servico', ServicoController.delete);
 
 export default routes;

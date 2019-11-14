@@ -14,6 +14,8 @@ class Endereco extends Model {
         sequelize,
       }
     );
+
+    return this;
   }
 }
 

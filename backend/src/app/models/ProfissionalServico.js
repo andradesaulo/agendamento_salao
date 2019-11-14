@@ -5,6 +5,8 @@ class ProfissionalServico extends Model {
     super.init(
       {},
       {
+        freezeTableName: true,
+        tableName: 'tb_profissional_servico',
         sequelize,
       }
     );
@@ -13,8 +15,12 @@ class ProfissionalServico extends Model {
   }
 
   static associate(models) {
-    this.belongsTo(models.Endereco, { foreignKey: 'id_endereco' });
-    this.belongsTo(models.Profissional, { foreignKey: 'id_profissional' });
+    this.belongsTo(models.Profissional, {
+      foreignKey: 'id',
+    });
+    this.belongsTo(models.Servico, {
+      foreignKey: 'id',
+    });
   }
 }
 
