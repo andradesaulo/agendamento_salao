@@ -29,7 +29,7 @@ class ServicoController {
       descricao: Yup.string().required(),
       preco_servico: Yup.number().required(),
       exclusivo: Yup.boolean().required(),
-      duracao: Yup.number().required(),
+      duracao: Yup.string().required(),
     });
 
     if (!(await schema.isValid(req.body))) {
@@ -45,7 +45,7 @@ class ServicoController {
     }
 
     const {
-      id_servico,
+      id,
       descricao,
       preco_servico,
       exclusivo,
@@ -53,7 +53,7 @@ class ServicoController {
     } = await Servico.create(req.body);
 
     return res.json({
-      id_servico,
+      id,
       descricao,
       preco_servico,
       exclusivo,
@@ -69,14 +69,14 @@ class ServicoController {
         .required(),
       preco_servico: Yup.number().required(),
       exclusivo: Yup.boolean().required(),
-      duracao: Yup.number().required(),
+      duracao: Yup.string().required(),
     });
 
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Dados inválidos' });
     }
 
-    const servico = await Servico.findByPk(req.params.id_servico);
+    const servico = await Servico.findByPk(req.params.id);
 
     if (req.body.descricao !== servico.descricao) {
       const servicoExists = await Servico.findOne({
@@ -88,18 +88,16 @@ class ServicoController {
       }
     }
 
-    await Servico.update(req.body);
-
     const {
-      id_servico,
+      id,
       descricao,
       preco_servico,
       exclusivo,
       duracao,
-    } = await Servico.findByPk(req.params.id_servico);
+    } = await servico.update(req.body);
 
     return res.json({
-      id_servico,
+      id,
       descricao,
       preco_servico,
       exclusivo,
@@ -116,7 +114,7 @@ class ServicoController {
       });
     }
 
-    const servicoExists = await Servico.findByPk(req.params.id_servico);
+    const servicoExists = await Servico.findByPk(req.params.id);
 
     if (!servicoExists) {
       return res.status(400).json({
@@ -126,7 +124,7 @@ class ServicoController {
 
     await Servico.destroy({
       where: {
-        id_servico: req.params.id_servico,
+        id: req.params.id,
       },
     });
 
