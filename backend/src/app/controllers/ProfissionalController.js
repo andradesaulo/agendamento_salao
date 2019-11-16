@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import Servico from '../models/Servico';
+import Endereco from '../models/Endereco';
 import Profissional from '../models/Profissional';
 
 class ProfissionalController {
@@ -14,14 +14,9 @@ class ProfissionalController {
       offset: (page - 1) * 20,
       include: [
         {
-          model: Servico,
-          attributes: [
-            'id',
-            'descricao',
-            'preco_servico',
-            'exclusivo',
-            'duracao',
-          ],
+          model: Endereco,
+          as: 'endereco',
+          attributes: ['id', 'rua', 'numero', 'bairro', 'cidade', 'estado'],
         },
       ],
     });
@@ -37,6 +32,7 @@ class ProfissionalController {
       email: Yup.string()
         .email()
         .required(),
+      id_endereco: Yup.number().required(),
     });
 
     if (!(await schema.isValid(req.body))) {
@@ -51,14 +47,16 @@ class ProfissionalController {
       return res.status(400).json({ error: 'Profissional já cadastrado' });
     }
 
-    const { id, nome, telefone, email } = await Profissional.create(req.body);
+    const { nome, telefone, email, id_endereco } = req.body;
 
-    return res.json({
-      id,
+    const profissional = await Profissional.create({
       nome,
       telefone,
       email,
+      id_endereco,
     });
+
+    return res.json(profissional);
   }
 
   // Atualiza

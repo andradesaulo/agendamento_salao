@@ -19,10 +19,9 @@ class Profissional extends Model {
   }
 
   static associate(models) {
-    this.belongsTo(models.Endereco, { foreignKey: 'id_endereco' });
-    this.belongsToMany(models.Servico, {
-      through: 'tb_profissional_servico',
-      foreignKey: 'id_profissional',
+    this.belongsTo(models.Endereco, {
+      foreignKey: 'id_endereco',
+      as: 'endereco',
     });
   }
 }
