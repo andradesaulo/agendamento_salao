@@ -31,7 +31,7 @@ class ServicoController {
       return res.status(400).json({ error: 'Profissional não encontrado' });
     }
 
-    return res.json(profissional);
+    return res.json(profissional.servicos);
   }
 
   // Cadastra

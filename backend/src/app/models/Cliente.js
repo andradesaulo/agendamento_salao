@@ -7,7 +7,7 @@ class Cliente extends Model {
       {
         nome: Sequelize.STRING(60),
         telefone: Sequelize.STRING(20),
-        email: Sequelize.STRING(20),
+        email: Sequelize.STRING(60),
         senha: Sequelize.VIRTUAL,
         senha_hash: Sequelize.STRING,
       },

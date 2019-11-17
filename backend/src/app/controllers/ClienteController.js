@@ -30,7 +30,7 @@ class ClienteController {
 
     const { nome, telefone, email, senha, id_endereco } = req.body;
 
-    const cliente = await Cliente.create({
+    const { id } = await Cliente.create({
       nome,
       telefone,
       email,
@@ -38,7 +38,13 @@ class ClienteController {
       id_endereco,
     });
 
-    return res.json(cliente);
+    return res.json({
+      id,
+      nome,
+      telefone,
+      email,
+      id_endereco,
+    });
   }
 }
 

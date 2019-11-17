@@ -33,6 +33,9 @@ class ProfissionalController {
         .email()
         .required(),
       id_endereco: Yup.number().required(),
+      senha: Yup.string()
+        .required()
+        .min(6),
     });
 
     if (!(await schema.isValid(req.body))) {
@@ -47,16 +50,23 @@ class ProfissionalController {
       return res.status(400).json({ error: 'Profissional já cadastrado' });
     }
 
-    const { nome, telefone, email, id_endereco } = req.body;
+    const { nome, telefone, email, senha, id_endereco } = req.body;
 
-    const profissional = await Profissional.create({
+    const { id } = await Profissional.create({
+      nome,
+      telefone,
+      email,
+      senha,
+      id_endereco,
+    });
+
+    return res.json({
+      id,
       nome,
       telefone,
       email,
       id_endereco,
     });
-
-    return res.json(profissional);
   }
 
   // Atualiza
