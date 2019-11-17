@@ -10,7 +10,6 @@ class Servico extends Model {
         duracao: Sequelize.TIME,
       },
       {
-        freezeTableName: true,
         tableName: 'tb_servico',
         sequelize,
       }
@@ -21,8 +20,9 @@ class Servico extends Model {
 
   static associate(models) {
     this.belongsToMany(models.Profissional, {
-      through: 'tb_profissional_servico',
       foreignKey: 'id_servico',
+      through: 'tb_profissional_servico',
+      as: 'profissionais',
     });
   }
 }

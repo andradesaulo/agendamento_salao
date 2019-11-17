@@ -12,15 +12,26 @@ class ServicoController {
       attributes: ['id', 'descricao', 'preco_servico', 'exclusivo', 'duracao'],
       limit: 20,
       offset: (page - 1) * 20,
-      include: [
-        {
-          model: Profissional,
-          attributes: ['id', 'nome', 'telefone'],
-        },
-      ],
     });
 
     return res.json(servicos);
+  }
+
+  async show(req, res) {
+    const { id_profissional } = req.params;
+
+    const profissional = await Profissional.findByPk(id_profissional, {
+      include: {
+        association: 'servicos',
+        through: { attributes: [] },
+      },
+    });
+
+    if (!profissional) {
+      return res.status(400).json({ error: 'Profissional não encontrado' });
+    }
+
+    return res.json(profissional);
   }
 
   // Cadastra
@@ -36,29 +47,27 @@ class ServicoController {
       return res.status(400).json({ error: 'Dados inválidos' });
     }
 
-    const servicoExists = await Servico.findOne({
-      where: { descricao: req.body.descricao },
-    });
+    const { id_profissional } = req.params;
+    const { descricao, preco_servico, exclusivo, duracao } = req.body;
 
-    if (servicoExists) {
-      return res.status(400).json({ error: 'Serviço já existente' });
+    const profissional = await Profissional.findByPk(id_profissional);
+
+    if (!profissional) {
+      return res.status(400).json({ error: 'Profissional não encontrado' });
     }
 
-    const {
-      id,
-      descricao,
-      preco_servico,
-      exclusivo,
-      duracao,
-    } = await Servico.create(req.body);
-
-    return res.json({
-      id,
-      descricao,
-      preco_servico,
-      exclusivo,
-      duracao,
+    const [servico] = await Servico.findOrCreate({
+      where: {
+        descricao,
+        preco_servico,
+        exclusivo,
+        duracao,
+      },
     });
+
+    await profissional.addServico(servico);
+
+    return res.json(servico);
   }
 
   // Atualiza
@@ -107,26 +116,25 @@ class ServicoController {
 
   // Remove
   async delete(req, res) {
-    // Verifica se o usuário logado é administrador
-    if (!req.isAdm) {
-      return res.status(401).json({
-        error: 'Permissão de usuário insuficiente',
-      });
-    }
+    const { id_profissional, id_servico } = req.params;
 
-    const servicoExists = await Servico.findByPk(req.params.id);
+    const profissional = await Profissional.findByPk(id_profissional);
 
-    if (!servicoExists) {
+    if (!profissional) {
       return res.status(400).json({
-        error: 'Serviço não existe',
+        error: 'Profissional não encontrado',
       });
     }
 
-    await Servico.destroy({
-      where: {
-        id: req.params.id,
-      },
-    });
+    const servico = await Servico.findByPk(id_servico);
+
+    if (!servico) {
+      return res.status(400).json({
+        error: 'Serviço não encontrado',
+      });
+    }
+
+    await profissional.removeServico(servico);
 
     return res.status(200).json({
       message: 'Serviço removido com sucesso',

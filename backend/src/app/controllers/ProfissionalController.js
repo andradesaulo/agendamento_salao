@@ -62,11 +62,10 @@ class ProfissionalController {
   // Atualiza
   async update(req, res) {
     const schema = Yup.object().shape({
-      nome: Yup.string().required(),
-      telefone: Yup.string().required(),
-      email: Yup.string()
-        .email()
-        .required(),
+      nome: Yup.string(),
+      telefone: Yup.string(),
+      email: Yup.string().email(),
+      id_endereco: Yup.number(),
     });
 
     if (!(await schema.isValid(req.body))) {
@@ -75,24 +74,19 @@ class ProfissionalController {
 
     const profissional = await Profissional.findByPk(req.params.id);
 
-    if (req.body.email !== profissional.email) {
+    if (req.body.email && req.body.email !== profissional.email) {
       const profissionalExists = await Profissional.findOne({
         where: { email: req.body.email },
       });
 
       if (profissionalExists) {
-        return res.status(400).json({ error: 'Profissional já cadastrado' });
+        return res.status(400).json({ error: 'Email já cadastrado' });
       }
     }
 
-    const { id, nome, telefone, email } = await profissional.update(req.body);
+    const profissionalAtualizado = await profissional.update(req.body);
 
-    return res.json({
-      id,
-      nome,
-      telefone,
-      email,
-    });
+    return res.json(profissionalAtualizado);
   }
 
   // Remove
