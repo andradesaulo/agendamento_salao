@@ -20,6 +20,13 @@ routes.post('/cliente', ClienteController.store);
 // Verifica se o usuário está logado, para todas as rotas abaixo
 routes.use(authMiddleware);
 
+// Atualiza cliente
+routes.put('/cliente/:id', ClienteController.update);
+// Lista todos clientes
+routes.get('/clientes', ClienteController.index);
+// Remove cliente
+routes.delete('/cliente/:id', ClienteController.delete);
+
 // Cadastra profissional
 routes.post('/profissional', ProfissionalController.store);
 // Lista todos profissionais
