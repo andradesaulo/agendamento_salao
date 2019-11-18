@@ -8,7 +8,7 @@ class ProfissionalController {
     const { page = 1 } = req.query;
 
     const profissionais = await Profissional.findAll({
-      order: ['nome'],
+      order: ['id'],
       attributes: ['id', 'nome', 'telefone', 'email'],
       limit: 20,
       offset: (page - 1) * 20,
@@ -50,23 +50,22 @@ class ProfissionalController {
       return res.status(400).json({ error: 'Profissional já cadastrado' });
     }
 
-    const { nome, telefone, email, senha, id_endereco } = req.body;
+    const { id } = await Profissional.create(req.body);
 
-    const { id } = await Profissional.create({
-      nome,
-      telefone,
-      email,
-      senha,
-      id_endereco,
-    });
-
-    return res.json({
+    const { nome, telefone, email, endereco } = await Profissional.findByPk(
       id,
-      nome,
-      telefone,
-      email,
-      id_endereco,
-    });
+      {
+        include: [
+          {
+            model: Endereco,
+            as: 'endereco',
+            attributes: ['id', 'rua', 'numero', 'bairro', 'cidade', 'estado'],
+          },
+        ],
+      }
+    );
+
+    return res.json({ id, nome, telefone, email, endereco });
   }
 
   // Atualiza
@@ -76,55 +75,64 @@ class ProfissionalController {
       telefone: Yup.string(),
       email: Yup.string().email(),
       id_endereco: Yup.number(),
+      senhaAntiga: Yup.string()
+        .min(6)
+        .when('senha', (senha, field) => (senha ? field.required() : field)),
+      senha: Yup.string().min(6),
     });
 
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Dados inválidos' });
     }
 
-    const profissional = await Profissional.findByPk(req.params.id);
+    const { email, senhaAntiga, senha } = req.body;
+    const { id } = req.params;
 
-    if (req.body.email && req.body.email !== profissional.email) {
+    const profissional = await Profissional.findByPk(id);
+
+    if (email && email !== profissional.email) {
       const profissionalExists = await Profissional.findOne({
-        where: { email: req.body.email },
+        where: { email },
       });
 
       if (profissionalExists) {
-        return res.status(400).json({ error: 'Email já cadastrado' });
+        return res.status(400).json({ error: 'Profissional já cadastrado' });
       }
     }
 
-    const profissionalAtualizado = await profissional.update(req.body);
+    if (senha && !(await profissional.verificaSenha(senhaAntiga))) {
+      return res.status(401).json({ error: 'Senha incorreta' });
+    }
+
+    await profissional.update(req.body);
+
+    const profissionalAtualizado = await Profissional.findByPk(id, {
+      attributes: ['id', 'nome', 'telefone', 'email'],
+      include: [
+        {
+          model: Endereco,
+          as: 'endereco',
+          attributes: ['id', 'rua', 'numero', 'bairro', 'cidade', 'estado'],
+        },
+      ],
+    });
 
     return res.json(profissionalAtualizado);
   }
 
   // Remove
   async delete(req, res) {
-    // Verifica se o usuário logado é administrador
-    if (!req.isAdm) {
-      return res.status(401).json({
-        error: 'Permissão de usuário insuficiente',
-      });
+    const { id } = req.params;
+
+    const profissional = await Profissional.findByPk(id);
+
+    if (!profissional) {
+      return res.status(400).json({ error: 'Profissional não encontrado' });
     }
 
-    const profissionalExists = await Profissional.findByPk(req.params.id);
+    await Profissional.destroy({ where: { id } });
 
-    if (!profissionalExists) {
-      return res.status(400).json({
-        error: 'Profissional não cadastrado',
-      });
-    }
-
-    await Profissional.destroy({
-      where: {
-        id: req.params.id,
-      },
-    });
-
-    return res.status(200).json({
-      message: 'Profissional removido com sucesso',
-    });
+    return res.json({ message: 'Profissional removido com sucesso' });
   }
 }
 

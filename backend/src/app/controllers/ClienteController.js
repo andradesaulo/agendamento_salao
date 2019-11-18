@@ -50,23 +50,19 @@ class ClienteController {
       return res.status(400).json({ error: 'Cliente já cadastrado' });
     }
 
-    const { nome, telefone, email, senha, id_endereco } = req.body;
+    const { id } = await Cliente.create(req.body);
 
-    const { id } = await Cliente.create({
-      nome,
-      telefone,
-      email,
-      senha,
-      id_endereco,
+    const { nome, telefone, email, endereco } = await Cliente.findByPk(id, {
+      include: [
+        {
+          model: Endereco,
+          as: 'endereco',
+          attributes: ['id', 'rua', 'numero', 'bairro', 'cidade', 'estado'],
+        },
+      ],
     });
 
-    return res.json({
-      id,
-      nome,
-      telefone,
-      email,
-      id_endereco,
-    });
+    return res.json({ id, nome, telefone, email, endereco });
   }
 
   async update(req, res) {
@@ -90,6 +86,10 @@ class ClienteController {
 
     const cliente = await Cliente.findByPk(id);
 
+    if (!cliente) {
+      return res.status(400).json({ error: 'Cliente não encontrado' });
+    }
+
     if (email && email !== cliente.email) {
       const clienteExists = await Cliente.findOne({ where: { email } });
 
@@ -104,27 +104,32 @@ class ClienteController {
 
     await cliente.update(req.body);
 
-    const { nome, telefone, id_endereco } = await Cliente.findByPk(id);
-
-    return res.json({
-      id,
-      nome,
-      telefone,
-      email,
-      id_endereco,
+    const clienteAtualizado = await Cliente.findByPk(id, {
+      attributes: ['id', 'nome', 'telefone', 'email'],
+      include: [
+        {
+          model: Endereco,
+          as: 'endereco',
+          attributes: ['id', 'rua', 'numero', 'bairro', 'cidade', 'estado'],
+        },
+      ],
     });
+
+    return res.json(clienteAtualizado);
   }
 
   async delete(req, res) {
     const { id } = req.params;
 
-    await Cliente.destroy({
-      where: { id },
-    });
+    const cliente = await Cliente.findByPk(id);
 
-    return res.status(200).json({
-      message: 'Cliente removido com sucesso',
-    });
+    if (!cliente) {
+      return res.status(400).json({ error: 'Cliente não encontrado' });
+    }
+
+    await Cliente.destroy({ where: { id } });
+
+    return res.json({ message: 'Cliente removido com sucesso' });
   }
 }
 

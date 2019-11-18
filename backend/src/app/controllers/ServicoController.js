@@ -136,7 +136,7 @@ class ServicoController {
 
     await profissional.removeServico(servico);
 
-    return res.status(200).json({
+    return res.json({
       message: 'Serviço removido com sucesso',
     });
   }
