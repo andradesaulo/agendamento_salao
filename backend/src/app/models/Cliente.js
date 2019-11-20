@@ -31,6 +31,10 @@ class Cliente extends Model {
       foreignKey: 'id_endereco',
       as: 'endereco',
     });
+    this.hasMany(models.Agendamento, {
+      foreignKey: 'id_cliente',
+      as: 'agendamentos',
+    });
   }
 
   verificaSenha(senha) {

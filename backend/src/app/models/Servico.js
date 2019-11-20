@@ -24,6 +24,10 @@ class Servico extends Model {
       through: 'tb_profissional_servico',
       as: 'profissionais',
     });
+    this.hasMany(models.Agendamento, {
+      foreignKey: 'id_servico',
+      as: 'agendamentos',
+    });
   }
 }
 

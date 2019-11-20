@@ -1,8 +1,8 @@
 import Sequelize from 'sequelize';
 
 import Agendamento from '../app/models/Agendamento';
-import Endereco from '../app/models/Endereco';
 import Cliente from '../app/models/Cliente';
+import Endereco from '../app/models/Endereco';
 import Horario from '../app/models/Horario';
 import Profissional from '../app/models/Profissional';
 import Servico from '../app/models/Servico';
