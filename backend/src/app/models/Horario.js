@@ -9,6 +9,7 @@ class Horario extends Model {
         hr_fim: Sequelize.TIME,
       },
       {
+        tableName: 'tb_horario',
         sequelize,
       }
     );
@@ -17,7 +18,10 @@ class Horario extends Model {
   }
 
   static associate(models) {
-    this.belongsTo(models.Profissional, { foreignKey: 'id_profissional' });
+    this.belongsTo(models.Profissional, {
+      foreignKey: 'id_profissional',
+      as: 'profissional',
+    });
   }
 }
 

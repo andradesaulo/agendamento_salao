@@ -36,6 +36,10 @@ class Profissional extends Model {
       through: 'tb_profissional_servico',
       as: 'servicos',
     });
+    this.hasMany(models.Horario, {
+      foreignKey: 'id_profissional',
+      as: 'horarios',
+    });
     this.hasMany(models.Agendamento, {
       foreignKey: 'id_profissional',
       as: 'agendamentos',

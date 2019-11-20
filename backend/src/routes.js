@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 import ClienteController from './app/controllers/ClienteController';
 import EnderecoController from './app/controllers/EnderecoController';
+import HorarioController from './app/controllers/HorarioController';
 import ProfissionalController from './app/controllers/ProfissionalController';
 import ServicoController from './app/controllers/ServicoController';
 import SessionController from './app/controllers/SessionController';
@@ -50,6 +51,11 @@ routes.delete(
   '/profissionais/:id_profissional/servico/:id_servico',
   ServicoController.delete
 );
+
+// Cadastra horários do profissional
+routes.post('/profissionais/:id_profissional/horario', HorarioController.store);
+// Lista horários do profissional
+routes.get('/profissionais/:id_profissional/horarios', HorarioController.show);
 
 // Lista todos serviços
 routes.get('/servicos', ServicoController.index);
