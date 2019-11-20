@@ -1,5 +1,6 @@
 import { Router } from 'express';
 
+import AgendamentoController from './app/controllers/AgendamentoController';
 import ClienteController from './app/controllers/ClienteController';
 import EnderecoController from './app/controllers/EnderecoController';
 import HorarioController from './app/controllers/HorarioController';
@@ -59,5 +60,10 @@ routes.get('/profissionais/:id_profissional/horarios', HorarioController.show);
 
 // Lista todos serviços
 routes.get('/servicos', ServicoController.index);
+
+// Cadastra agendamento
+routes.post('/agendamento', AgendamentoController.store);
+// Lista agendamentos
+routes.get('/agendamentos', AgendamentoController.index);
 
 export default routes;

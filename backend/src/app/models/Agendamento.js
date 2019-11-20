@@ -10,6 +10,7 @@ class Agendamento extends Model {
         valor_pago: Sequelize.DECIMAL(5, 2),
       },
       {
+        tableName: 'tb_agendamento',
         sequelize,
       }
     );

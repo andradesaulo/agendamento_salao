@@ -37,11 +37,9 @@ module.exports = {
         type: Sequelize.TIME,
       },
       descricao: {
-        allowNull: false,
         type: Sequelize.STRING(60),
       },
       valor_pago: {
-        allowNull: false,
         type: Sequelize.DECIMAL(5, 2),
       },
       created_at: {
